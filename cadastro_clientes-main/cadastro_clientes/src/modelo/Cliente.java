@@ -46,4 +46,13 @@ public class Cliente {
 
     public String getCep() { return cep; }
     public void setCep(String cep) { this.cep = cep; }
+    private boolean status;
+
+public boolean isStatus() {
+    return status;
+}
+
+public void setStatus(boolean status) {
+    this.status = status;
+}
 }

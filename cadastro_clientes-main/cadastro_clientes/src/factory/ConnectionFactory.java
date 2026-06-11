@@ -11,6 +11,14 @@ public class ConnectionFactory {
     private static final String PASS = "1234";
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASS);
+
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+    } catch (ClassNotFoundException e) {
+        throw new SQLException("Driver MySQL não encontrado.", e);
     }
+
+    return DriverManager.getConnection(URL, USER, PASS);
+}
+    
 }

@@ -1,9 +1,12 @@
-import gui.TelaCadastro;
+import gui.TelaConsulta;
 
 import javax.swing.SwingUtilities;
 
 public class Main {
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new TelaCadastro());
+
+        SwingUtilities.invokeLater(() -> new TelaConsulta());
+
     }
 }

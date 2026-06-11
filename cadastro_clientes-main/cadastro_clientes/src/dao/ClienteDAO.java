@@ -10,8 +10,8 @@ public class ClienteDAO {
 
     public void cadastrar(Cliente c) throws SQLException {
         String sql = "INSERT INTO cliente (nome, cpf, data_nascimento, telefone, " +
-                     "endereco, bairro, cidade, estado, cep) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+             "endereco, bairro, cidade, estado, cep, status) " +
+             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -25,6 +25,7 @@ public class ClienteDAO {
             ps.setString(7, c.getCidade());
             ps.setString(8, c.getEstado());
             ps.setString(9, c.getCep());
+            ps.setBoolean(10, true);
 
             ps.executeUpdate();
         }
@@ -64,8 +65,7 @@ public class ClienteDAO {
     }
 
     public void alterar(Cliente c) throws SQLException {
-        String sql = "UPDATE cliente SET nome=?, cpf=?, data_nascimento=?, telefone=?, " +
-                     "endereco=?, bairro=?, cidade=?, estado=?, cep=? WHERE id=?";
+        String sql = "SELECT * FROM cliente WHERE status = true AND (nome LIKE ? OR cpf LIKE ?)";
 
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -85,17 +85,17 @@ public class ClienteDAO {
         }
     }
 
-    public void excluir(int id) throws SQLException {
-        String sql = "DELETE FROM cliente WHERE id = ?";
+   public void excluir(int id) throws SQLException {
 
-        try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+    String sql = "UPDATE cliente SET status = false WHERE id = ?";
 
-            ps.setInt(1, id);
-            ps.executeUpdate();
-        }
+    try (Connection conn = ConnectionFactory.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setInt(1, id);
+        ps.executeUpdate();
     }
-
+}
     private Cliente mapear(ResultSet rs) throws SQLException {
         Cliente c = new Cliente();
         c.setId(rs.getInt("id"));
@@ -108,6 +108,7 @@ public class ClienteDAO {
         c.setCidade(rs.getString("cidade"));
         c.setEstado(rs.getString("estado"));
         c.setCep(rs.getString("cep"));
+        c.setStatus(rs.getBoolean("status"));
         return c;
     }
 }
